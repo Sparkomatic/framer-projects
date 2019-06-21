@@ -1,0 +1,46 @@
+import * as React from "react"
+import { Data, Override, Page, Frame, Animatable, animate } from "framer"
+
+const data = Data({
+    pageIndex: 2,
+})
+
+let tabArray
+
+export function PageOverride(props): Override {
+    console.log("page overide called ")
+    return {
+        currentPage: data.pageIndex,
+        onChangePage: pageIndex => {
+            console.log("onChangePage and pageIndex is ", data.pageIndex)
+            // removing this due to bug with data object
+        },
+    }
+}
+
+export const TabContainer: Override = props => {
+    if (tabArray === undefined) {
+        tabArray = props.children
+    }
+}
+
+export function Tab(props): Override {
+    console.log("Tab override called")
+    return {
+        currentPage: data.pageIndex,
+        onTap: () => {
+            data.pageIndex = tabArray.findIndex(tab => {
+                return props.id === tab.props.id
+            })
+        },
+    }
+}
+
+export function Indicator(props): Override {
+    console.log("indiactor override called ", props)
+    return {
+        currentPage: data.pageIndex,
+        x: 320 - (data.pageIndex + 1) * props.width,
+    }
+}
+//
